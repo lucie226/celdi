@@ -1,0 +1,27 @@
+<header class="header">
+  <div class="header-left">
+    <button (click)="toggleMenu()">
+      <lucide-icon [img]="Menu"></lucide-icon>
+    </button>
+    <h2 class="page-title">{{ pageTitle }}</h2>
+  </div>
+
+  <div class="header-right">
+    <div *ngIf="showSearch" class="search-box">
+      <lucide-icon [img]="Search" class="search-icon"></lucide-icon>
+      <input
+        type="text"
+        placeholder="Rechercher un prospect..."
+        [value]="recherche.terme()"
+        (input)="recherche.terme.set($any($event.target).value)"
+        (keydown.enter)="validerRecherche()">
+    </div>
+
+    <div class="user-profil" [title]="nomUtilisateur">
+      <div class="user">
+        <lucide-icon [img]="User"></lucide-icon>
+      </div>
+      <span class="user-name">{{ libelleRole }}</span>
+    </div>
+  </div>
+</header>

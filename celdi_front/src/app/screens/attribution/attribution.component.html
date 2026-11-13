@@ -1,0 +1,44 @@
+<div class="overlay" (click)="fermer.emit()">
+  <div class="attribution-container" (click)="$event.stopPropagation()">
+    <h2 class="Attribuer">Attribuer un prospect</h2>
+    <span class="trait"></span>
+
+    @if (erreur) {
+      <p class="erreur">{{ erreur }}</p>
+    }
+
+    <form (submit)="$event.preventDefault(); attribuer()">
+      <div class="card">
+        <label for="prospect">Prospect</label>
+        <select id="prospect" name="prospect" (change)="choisirProspect($any($event.target).value)">
+          <option value="" [selected]="prospectChoisi === null">Sélectionner le prospect</option>
+          @for (p of prospects; track p.id) {
+            <option [value]="p.id" [selected]="p.id === prospectChoisi">
+              {{ p.nom }} ({{ p.assignedTo ? 'actuellement : ' + nomCommercial(p.assignedTo) : 'non assigné' }})
+            </option>
+          }
+        </select>
+      </div>
+
+      <div class="card">
+        <label for="commercial">Commercial</label>
+        <select id="commercial" name="commercial" (change)="choisirCommercial($any($event.target).value)">
+          <option value="" [selected]="commercialChoisi === null">Sélectionner le commercial</option>
+          @for (c of commerciaux; track c.id) {
+            <option [value]="c.id" [selected]="c.id === commercialChoisi">{{ c.nom }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="att"
+                [disabled]="prospectChoisi === null || commercialChoisi === null || envoi">
+          {{ envoi ? 'Attribution...' : 'Attribuer' }}
+        </button>
+        <button type="button" class="attri" (click)="fermer.emit()">
+          Annuler
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,98 @@
+@if (estAdmin) {
+  <div class="user-container">
+    <h3 class="title">{{ idEnEdition === null ? 'Créer un utilisateur' : 'Modifier un utilisateur' }}</h3>
+
+    @if (erreur) {
+      <p class="erreur">{{ erreur }}</p>
+    }
+    @if (succes) {
+      <p class="succes">{{ succes }}</p>
+    }
+
+    <form class="formulaire" [formGroup]="form" (ngSubmit)="enregistrer()">
+      <div class="card">
+        <label for="username">Nom d'utilisateur</label>
+        <input id="username" type="text" formControlName="nom" placeholder="Entrez le nom d'utilisateur">
+      </div>
+
+      <div class="card">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" placeholder="exemple@gmail.com">
+      </div>
+
+      <div class="card">
+        <label for="role">Rôle</label>
+        <select id="role" formControlName="role">
+          @for (r of roles; track r) {
+            <option [value]="r">{{ libelles[r] }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="card">
+        <label for="password">Mot de passe</label>
+        <input id="password" type="password" formControlName="motDePasse"
+               [placeholder]="idEnEdition === null ? 'Entrez le mot de passe' : 'Laisser vide pour ne pas changer'">
+      </div>
+
+      <div class="card">
+        <label for="confirm-password">Confirmer le mot de passe</label>
+        <input id="confirm-password" type="password" formControlName="confirmation"
+               placeholder="Confirmez le mot de passe">
+      </div>
+
+      <button type="submit" class="btn-submit">
+        <lucide-icon [img]="UserPlus" size="18"></lucide-icon>
+        {{ idEnEdition === null ? 'Créer un utilisateur' : 'Enregistrer les modifications' }}
+      </button>
+
+      @if (idEnEdition !== null) {
+        <button type="button" class="btn-cancel" (click)="annuler()">Annuler</button>
+      }
+    </form>
+  </div>
+}
+
+<div class="table-container">
+  <p class="table-titre">Liste des utilisateurs</p>
+
+  @if (!estAdmin && erreur) {
+    <p class="erreur">{{ erreur }}</p>
+  }
+
+  <div class="table">
+    <table>
+      <thead>
+      <tr>
+        <th>Nom d'utilisateur</th>
+        <th>Email</th>
+        <th>Role</th>
+        @if (estAdmin) {
+          <th>Actions</th>
+        }
+      </tr>
+      </thead>
+      <tbody>
+      @for (u of utilisateurs; track u.id) {
+        <tr>
+          <td>{{ u.nom }}</td>
+          <td>{{ u.email }}</td>
+          <td>{{ libelles[u.role] }}</td>
+          @if (estAdmin) {
+            <td>
+              <button type="button" class="btn-action" (click)="editer(u)">Modifier</button>
+              @if (u.id !== monId) {
+                <button type="button" class="btn-action btn-danger" (click)="supprimer(u)">
+                  <lucide-icon [img]="Trash2" size="16"></lucide-icon>
+                </button>
+              }
+            </td>
+          }
+        </tr>
+      } @empty {
+        <tr><td [attr.colspan]="estAdmin ? 4 : 3">Aucun utilisateur</td></tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>

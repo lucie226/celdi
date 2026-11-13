@@ -1,0 +1,87 @@
+<div class="dashboard-top">
+  <p>
+    @if (nomUtilisateur) { Bonjour {{ nomUtilisateur }}, }
+    voici un aperçu de votre activité.
+  </p>
+</div>
+
+@if (erreur) {
+  <p class="erreur">{{ erreur }}</p>
+}
+
+<div class="Informations">
+  <div class="card">
+    <span class="title">Prospects</span>
+    <div class="red-text">
+      <lucide-icon [img]="UserIcon" class="icon"></lucide-icon>{{ total }}
+    </div>
+    <span class="card-footer">Total</span>
+  </div>
+
+  <div class="card">
+    <span class="title">A contacter</span>
+    <div class="red-text">
+      <lucide-icon [img]="PhoneIcon" class="icon"></lucide-icon>{{ comptes.NOUVEAU }}
+    </div>
+    <span class="card-footer">A appeler</span>
+  </div>
+
+  <div class="card">
+    <span class="title">En suivi</span>
+    <div class="red-text">
+      <lucide-icon [img]="ClockIcon" class="icon"></lucide-icon>{{ comptes.CONTACTE }}
+    </div>
+    <span class="card-footer">En cours</span>
+  </div>
+
+  <div class="card">
+    <span class="title">Convertis</span>
+    <div class="red-text">
+      <lucide-icon [img]="CheckIcon" class="icon"></lucide-icon>{{ comptes.CLIENT }}
+    </div>
+    <span class="card-footer">Taux : {{ taux }}%</span>
+  </div>
+
+  <div class="card">
+    <span class="title">Perdus</span>
+    <div class="red-text">
+      <lucide-icon [img]="X" class="icon"></lucide-icon>{{ comptes.PERDU }}
+    </div>
+    <span class="card-footer">Total</span>
+  </div>
+</div>
+
+<div class="table-container">
+  <p class="table-titre">Prochains suivis a effectuer</p>
+  <div class="table">
+    <table>
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Telephone</th>
+        <th>Email</th>
+        <th>Action</th>
+        <th>Source</th>
+        <th>Status</th>
+      </tr>
+      </thead>
+      <tbody>
+      @for (p of aSuivre; track p.id) {
+        <tr>
+          <td>{{ p.nom }}</td>
+          <td>{{ p.telephone }}</td>
+          <td>{{ p.email }}</td>
+          <td>{{ actionPour(p.statut) }}</td>
+          <td>{{ p.source }}</td>
+          <td class="status">{{ libelle(p.statut) }}</td>
+        </tr>
+      } @empty {
+        <tr><td colspan="6">Aucun suivi à effectuer</td></tr>
+      }
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="voirtout">
+  <a routerLink="/prospects">Voir tout</a>
+</div>

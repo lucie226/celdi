@@ -1,0 +1,119 @@
+<div class="stat-head">
+  <span class="title">Filtrer les statistiques</span>
+  <div class="options">
+    <select id="stat-source" (change)="sourceChoisie = $any($event.target).value">
+      <option value="">Toutes les sources</option>
+      @for (s of sources; track s.cle) {
+        <option [value]="s.cle">{{ s.nom }}</option>
+      }
+    </select>
+
+    @if (peutFiltrerCommercial) {
+      <select id="stat-commercial" (change)="commercialChoisi = $any($event.target).value">
+        <option value="">Tous les commerciaux</option>
+        @for (c of commerciaux; track c.id) {
+          <option [value]="c.id">{{ c.nom }}</option>
+        }
+      </select>
+    }
+
+    <button type="button" class="filtrer" (click)="calculer()">Filtrer</button>
+  </div>
+</div>
+
+@if (erreur) {
+  <p class="erreur">{{ erreur }}</p>
+}
+
+<div class="Informations">
+  <div class="card">
+    <span class="title">Total Prospects</span>
+    <div class="orange-text">{{ total }}</div>
+    <span class="card-footer">Prospects enregistrés</span>
+  </div>
+  <div class="card">
+    <span class="title">Nouveaux Prospects</span>
+    <div class="orange-text">{{ comptes.NOUVEAU }}</div>
+    <span class="card-footer">Pas encore contactés</span>
+  </div>
+  <div class="card">
+    <span class="title">Clients convertis</span>
+    <div class="green-text">{{ comptes.CLIENT }}</div>
+    <span class="card-footer">Prospects devenus clients</span>
+  </div>
+  <div class="card">
+    <span class="title">Taux de conversion</span>
+    <div class="blue-text">{{ taux }}%</div>
+    <span class="card-footer">Conversion globale</span>
+  </div>
+</div>
+
+<div class="graph">
+  <div class="chart-section">
+    <h3>Prospects par statut</h3>
+    <div class="card">
+      <span class="title">Nouveau</span>
+      <div class="orange-rectangular" [style.width.%]="pct(comptes.NOUVEAU)"></div>
+      <span class="title val">{{ comptes.NOUVEAU }}</span>
+    </div>
+    <div class="card">
+      <span class="title">En<br>cours</span>
+      <div class="yellow-rectangular" [style.width.%]="pct(comptes.CONTACTE)"></div>
+      <span class="title val">{{ comptes.CONTACTE }}</span>
+    </div>
+    <div class="card">
+      <span class="title">Conve<br>rti</span>
+      <div class="green-rectangular" [style.width.%]="pct(comptes.CLIENT)"></div>
+      <span class="title val">{{ comptes.CLIENT }}</span>
+    </div>
+    <div class="card">
+      <span class="title">Perdu</span>
+      <div class="red-rectangular" [style.width.%]="pct(comptes.PERDU)"></div>
+      <span class="title val">{{ comptes.PERDU }}</span>
+    </div>
+  </div>
+
+  <div class="chart-section">
+    <h3>Prospects par source</h3>
+    @for (l of lignesSources; track l.nom) {
+      <div class="card">
+        <span class="title">{{ l.nom }}</span>
+        <div [class]="l.classe" [style.width.%]="l.pct"></div>
+        <span class="title val">{{ l.nombre }}</span>
+      </div>
+    } @empty {
+      <p>Aucune donnée</p>
+    }
+  </div>
+</div>
+
+<div class="resume">
+  <div class="card">
+    <h3>Répartition actuelle</h3>
+    <div class="list">
+      <span class="Info">{{ comptes.NOUVEAU }} nouveaux prospects</span>
+      <span class="Info">{{ comptes.CONTACTE }} prospects en cours de traitement</span>
+      <span class="Info">{{ comptes.CLIENT }} prospects convertis</span>
+      <span class="Info">{{ comptes.PERDU }} prospects perdus</span>
+    </div>
+  </div>
+  <div class="card">
+    <h3>Résumé commercial</h3>
+    <div class="row">
+      <span class="Info">Prospects actifs</span>
+      <span class="val">{{ actifs }}</span>
+    </div>
+    <div class="row">
+      <span class="Info">Clients convertis</span>
+      <span class="val">{{ comptes.CLIENT }}</span>
+    </div>
+    <div class="row">
+      <span class="Info">Taux de conversion</span>
+      <span class="val">{{ taux }}%</span>
+    </div>
+    <div class="row">
+      <span class="Info">Dernière mise à jour</span>
+      <span class="val muted">{{ derniereMiseAJour }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,35 @@
+<div class="login-container">
+  <img src="assets/logoceldi-removebg-preview.png" class="logo-celdi">
+
+  <form [formGroup]="loginForm" (ngSubmit)="onLogin()" class="login-form">
+
+    <div class="form-group">
+      <label for="email">Adresse email</label>
+      <input
+        type="email"
+        id="email"
+        formControlName="email"
+        placeholder="celdi@gmail.com"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Mot de passe</label>
+      <input
+        type="password"
+        id="password"
+        formControlName="password"
+        placeholder="••••••••"
+      />
+    </div>
+
+    @if (erreur) {
+      <p class="erreur">{{ erreur }}</p>
+    }
+
+    <button type="submit" class="btn-submit" [disabled]="chargement">
+      {{ chargement ? 'Connexion...' : 'Se connecter' }}
+    </button>
+
+  </form>
+</div>

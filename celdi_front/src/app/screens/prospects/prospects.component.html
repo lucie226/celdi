@@ -1,0 +1,146 @@
+<div class="dashboard-top">
+  <p>Mes prospects</p>
+</div>
+
+<div class="Informations">
+  <div class="card">
+    <span class="title">Prospects</span>
+    <div class="red-text">
+      <lucide-icon [img]="UserIcon" class="icon"></lucide-icon>{{ prospects.length }}
+    </div>
+    <span class="card-footer">Total</span>
+  </div>
+
+  <div class="card">
+    <span class="title">A contacter</span>
+    <div class="red-text">
+      <lucide-icon [img]="PhoneIcon" class="icon"></lucide-icon>{{ compter('NOUVEAU') }}
+    </div>
+    <span class="card-footer">A appeler</span>
+  </div>
+
+  <div class="card">
+    <span class="title">En suivi</span>
+    <div class="red-text">
+      <lucide-icon [img]="ClockIcon" class="icon"></lucide-icon>{{ compter('CONTACTE') }}
+    </div>
+    <span class="card-footer">En cours</span>
+  </div>
+
+  <div class="card">
+    <span class="title">Convertis</span>
+    <div class="red-text">
+      <lucide-icon [img]="CheckIcon" class="icon"></lucide-icon>{{ compter('CLIENT') }}
+    </div>
+    <span class="card-footer">Total</span>
+  </div>
+
+  <div class="card">
+    <span class="title">Perdus</span>
+    <div class="red-text">
+      <lucide-icon [img]="XIcon" class="icon"></lucide-icon>{{ compter('PERDU') }}
+    </div>
+    <span class="card-footer">Total</span>
+  </div>
+</div>
+
+@if (erreur) {
+  <p class="erreur">{{ erreur }}</p>
+}
+@if (succes) {
+  <p class="succes">{{ succes }}</p>
+}
+
+<form class="formulaire" [formGroup]="form" (ngSubmit)="enregistrer()">
+  <h3>{{ idEnEdition === null ? 'Nouveau prospect' : 'Modifier le prospect' }}</h3>
+
+  <div class="form-grid">
+    <div class="card">
+      <label for="username">Nom</label>
+      <input id="username" type="text" formControlName="nom" placeholder="Entrez le nom">
+    </div>
+
+    <div class="card">
+      <label for="phone">Téléphone</label>
+      <input id="phone" type="tel" formControlName="telephone" placeholder="Entrer le numéro de téléphone">
+    </div>
+
+    <div class="card">
+      <label for="email">Email</label>
+      <input id="email" type="email" formControlName="email" placeholder="exemple@gmail.com">
+    </div>
+
+    <div class="card">
+      <label for="source">Source</label>
+      <input id="source" type="text" formControlName="source" placeholder="Entrer une source">
+    </div>
+
+    <div class="card">
+      <label for="statut">Statut</label>
+      <select id="statut" formControlName="statut">
+        @for (s of statuts; track s) {
+          <option [value]="s">{{ libelles[s] }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn-submit">
+      <lucide-icon [img]="UserPlus" size="18"></lucide-icon>
+      {{ idEnEdition === null ? 'Ajouter un prospect' : 'Enregistrer les modifications' }}
+    </button>
+
+    @if (idEnEdition !== null) {
+      <button type="button" class="btn-cancel" (click)="annuler()">Annuler</button>
+    }
+
+    @if (peutSupprimer && idEnEdition === null) {
+      <button type="button" class="btn-assign" (click)="ouvrirAttribution()">Attribuer un prospect</button>
+    }
+  </div>
+</form>
+
+<div class="prospects-list-section">
+  <h3>Liste des prospects</h3>
+  <table class="prospects-table">
+    <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Statut</th>
+      <th>Téléphone</th>
+      <th>Email</th>
+      <th>Source</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @for (p of prospectsFiltres; track p.id) {
+      <tr>
+        <td>{{ p.nom }}</td>
+        <td><span [class]="badgeClasse(p.statut)">{{ libelles[p.statut] }}</span></td>
+        <td>{{ p.telephone }}</td>
+        <td>{{ p.email }}</td>
+        <td>{{ p.source }}</td>
+        <td class="actions-cell">
+          <button type="button" class="btn-action btn-edit" (click)="editer(p)">Modifier</button>
+          @if (peutSupprimer) {
+            <button type="button" class="btn-action" (click)="ouvrirAttribution(p.id)">Attribuer</button>
+            <button type="button" class="btn-action btn-danger" (click)="supprimer(p)">Supprimer</button>
+          }
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="6">Aucun prospect</td></tr>
+    }
+    </tbody>
+  </table>
+</div>
+
+@if (afficherAttribution) {
+  <app-attribution
+    [prospects]="prospects"
+    [prospectId]="prospectAAttribuer"
+    (fermer)="afficherAttribution = false"
+    (attribue)="apresAttribution()" />
+}

@@ -1,0 +1,102 @@
+:host {
+  display: block;
+}
+
+.header {
+  height: 65px;
+  background-color: #FFFFFF;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  margin-left: 200px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: margin-left 0.3s ease;
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    button {
+      all: unset;
+      cursor: pointer;
+
+      .menu-toggle {
+        display: flex;
+        align-items: center;
+        color: #64748b;
+        cursor: pointer;
+      }
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1e283b;
+      margin: 0;
+    }
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      color: #94a3b8;
+      width: 16px;
+      height: 16px;
+    }
+
+    input {
+      padding: 8px 12px 8px 38px;
+      border: 1px solid #cbd5e1;
+      border-radius: 20px;
+      font-size: 14px;
+      outline: none;
+      width: 220px;
+
+      &:focus {
+        border-color: #FF4D00;
+      }
+    }
+  }
+
+  .user-profil {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .user {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #FF4D00;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .user-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: #334155;
+    }
+  }
+}
+
+/* Menu réduit : l'en-tête se rapproche du menu et gagne en largeur */
+:host(.collapsed) .header {
+  margin-left: 80px;
+}

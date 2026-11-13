@@ -1,0 +1,8 @@
+@if (router.url !== '/login') {
+  <app-sidebar [sidebarCollapsed]="sidebarCollapsed" (menuToggled)="onMenuToggle($event)"></app-sidebar>
+  <app-header [class.collapsed]="sidebarCollapsed" (menuToggled)="onMenuToggle(!sidebarCollapsed)"></app-header>
+}
+
+<main [class.main-content]="router.url !== '/login'" [class.collapsed]="sidebarCollapsed">
+  <router-outlet></router-outlet>
+</main>
